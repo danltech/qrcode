@@ -17,7 +17,6 @@
 
   .app { max-width: 1200px; margin: 0 auto; }
 
-  /* ---------- Header ---------- */
   header { text-align: center; margin-bottom: 28px; }
 
   header h1 {
@@ -201,6 +200,11 @@
     padding: 3px;
   }
 
+  .style-item input[type="color"]:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
   .style-item select {
     width: 100%;
     padding: 8px 10px;
@@ -288,6 +292,17 @@
     align-items: center;
     min-height: 280px;
     width: 100%;
+    /* Schachbrettmuster für transparenten Hintergrund */
+    background-image:
+      linear-gradient(45deg, #e5e7eb 25%, transparent 25%),
+      linear-gradient(-45deg, #e5e7eb 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, #e5e7eb 75%),
+      linear-gradient(-45deg, transparent 75%, #e5e7eb 75%);
+    background-size: 14px 14px;
+    background-position: 0 0, 0 7px, 7px -7px, -7px 0px;
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 4px;
   }
 
   #qrcode canvas,
@@ -299,8 +314,30 @@
     display: block;
   }
 
-  .download-btn {
+  /* ---------- Download-Zeile ---------- */
+  .download-row {
+    display: flex;
+    gap: 8px;
     width: 100%;
+  }
+
+  .download-row select {
+    flex: 0 0 130px;
+    padding: 0 10px;
+    border: 1.5px solid #d1d5db;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    background: #fafafa;
+    cursor: pointer;
+    font-family: inherit;
+    color: #111827;
+    font-weight: 500;
+  }
+
+  .download-row select:focus { outline: none; border-color: #6366f1; }
+
+  .download-btn {
+    flex: 1;
     padding: 14px;
     background: #6366f1;
     color: #fff;
@@ -333,19 +370,16 @@
     <p>Wähle einen Typ, gib deine Daten ein und gestalte deinen QR-Code.</p>
   </header>
 
-  <!-- Typ-Auswahl -->
   <div class="type-tiles" id="typeTiles"></div>
 
   <div class="main-grid">
     <div class="left-col">
-      <!-- Inhalt -->
       <section class="card">
         <h2 id="formTitle">Website</h2>
         <div id="formFields"></div>
         <div class="data-preview empty" id="dataPreview">Noch keine Daten</div>
       </section>
 
-      <!-- Design -->
       <section class="card">
         <h2>🎨 Design</h2>
         <div class="presets" id="presets"></div>
@@ -367,6 +401,13 @@
             <label for="bgColor">Hintergrund</label>
             <input type="color" id="bgColor" value="#ffffff">
           </div>
+        </div>
+
+        <div class="style-item" style="margin-bottom:14px;">
+          <label class="checkbox-label">
+            <input type="checkbox" id="transparentBg">
+            Transparenter Hintergrund
+          </label>
         </div>
 
         <div class="style-grid">
@@ -413,7 +454,6 @@
         </div>
       </section>
 
-      <!-- Erweitert -->
       <section class="card">
         <h2>⚙️ Erweitert</h2>
         <div class="style-grid">
@@ -448,18 +488,28 @@
       </section>
     </div>
 
-    <!-- Vorschau -->
     <div class="right-col">
       <div class="preview-card">
         <div id="qrcode"></div>
-        <button class="download-btn" id="downloadBtn" disabled>⬇️ Als PNG herunterladen</button>
-        <p class="hint">Die Vorschau wird automatisch aktualisiert.</p>
+
+        <div class="download-row">
+          <select id="downloadFormat" title="Format wählen">
+            <option value="png" selected>PNG</option>
+            <option value="svg">SVG (Vektor)</option>
+            <option value="jpeg">JPEG</option>
+            <option value="webp">WebP</option>
+          </select>
+          <button class="download-btn" id="downloadBtn" disabled>⬇️ Herunterladen</button>
+        </div>
+
+        <p class="hint" id="formatHint">
+          💡 SVG ist vektorbasiert – ideal für Druck und beliebiges Skalieren.
+        </p>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Bibliothek -->
 <script src="https://cdn.jsdelivr.net/npm/qr-code-styling@1.9.2/lib/qr-code-styling.min.js"></script>
 
 <script>
@@ -645,11 +695,15 @@ const formTitle    = $('formTitle');
 const dataPreview  = $('dataPreview');
 const presetsEl    = $('presets');
 const downloadBtn  = $('downloadBtn');
+const downloadFormat = $('downloadFormat');
+const formatHint   = $('formatHint');
 const qrcodeEl     = $('qrcode');
 const useLogoCheck = $('useLogo');
 const logoUploadGrp = $('logoUploadGroup');
 const logoFileInput = $('logoFile');
 const logoPreview  = $('logoPreview');
+const transparentBg = $('transparentBg');
+const bgColorInput = $('bgColor');
 
 /* =========================================================
    RENDER: TYP-KACHELN
@@ -730,7 +784,7 @@ function getStyle() {
     dotsColor: $('dotsColor').value,
     cornerSquareColor: $('cornerSquareColor').value,
     cornerDotColor: $('cornerDotColor').value,
-    bgColor: $('bgColor').value,
+    bgColor: transparentBg.checked ? 'transparent' : $('bgColor').value,
     dotsType: $('dotsType').value,
     cornerSquareType: $('cornerSquareType').value,
     cornerDotType: $('cornerDotType').value
@@ -746,7 +800,6 @@ function updateQr() {
   const useLogo = useLogoCheck.checked && !!logoDataUrl;
   const ecc = useLogo ? 'H' : $('ecc').value;
 
-  // Datenvorschau
   if (data) {
     const shown = data.length > 120 ? data.slice(0, 120) + '…' : data;
     dataPreview.textContent = shown.replace(/\r?\n/g, ' ↵ ');
@@ -756,7 +809,6 @@ function updateQr() {
     dataPreview.classList.add('empty');
   }
 
-  // Instanz erstellen
   if (!qrCodeInstance) {
     qrCodeInstance = new QRCodeStyling({ width: 280, height: 280, margin: 12, type: 'canvas' });
     qrcodeEl.innerHTML = '';
@@ -845,18 +897,22 @@ presetsEl.addEventListener('click', (e) => {
   if (btn) applyPreset(btn.dataset.preset);
 });
 
-// Formular-Eingaben
 ['input', 'change'].forEach(evt => {
   formFields.addEventListener(evt, scheduleUpdate);
 });
 
-// Style-Änderungen
 ['dotsColor','cornerSquareColor','cornerDotColor','bgColor',
  'dotsType','cornerSquareType','cornerDotType',
  'ecc','version','mode'].forEach(id => {
   const el = $(id);
   el.addEventListener('input', scheduleUpdate);
   el.addEventListener('change', scheduleUpdate);
+});
+
+// Transparenz-Checkbox deaktiviert den Farwähler
+transparentBg.addEventListener('change', () => {
+  bgColorInput.disabled = transparentBg.checked;
+  scheduleUpdate();
 });
 
 // Logo
@@ -878,10 +934,46 @@ logoFileInput.addEventListener('change', (e) => {
   reader.readAsDataURL(file);
 });
 
-// Download
-downloadBtn.addEventListener('click', () => {
-  if (qrCodeInstance) {
-    qrCodeInstance.download({ name: 'qrcode', extension: 'png' });
+// Format-Hinweis anpassen
+downloadFormat.addEventListener('change', () => {
+  const map = {
+    png: '💡 PNG – Standard-Rasterformat, überall kompatibel.',
+    svg: '💡 SVG ist vektorbasiert – ideal für Druck und beliebiges Skalieren.',
+    jpeg: '💡 JPEG – komprimiertes Rasterformat (kein transparenter Hintergrund).',
+    webp: '💡 WebP – modernes Format mit kleiner Dateigröße.'
+  };
+  formatHint.textContent = map[downloadFormat.value] || '';
+});
+
+// Download mit Format-Wahl
+downloadBtn.addEventListener('click', async () => {
+  if (!qrCodeInstance) return;
+  const ext = downloadFormat.value;
+
+  // Buttons temporär sperren
+  const originalText = downloadBtn.textContent;
+  downloadBtn.disabled = true;
+  downloadBtn.textContent = '⏳ Wird exportiert …';
+
+  try {
+    const blob = await qrCodeInstance.getRawData(ext);
+    if (!blob) throw new Error('Leerer Blob zurückgegeben');
+
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `qrcode.${ext}`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  } catch (err) {
+    console.error('Download fehlgeschlagen:', err);
+    alert(`Export als ${ext.toUpperCase()} fehlgeschlagen.\n` +
+          'Versuche es ggf. erneut oder wähle ein anderes Format (z. B. PNG).');
+  } finally {
+    downloadBtn.disabled = !buildData();
+    downloadBtn.textContent = originalText;
   }
 });
 
