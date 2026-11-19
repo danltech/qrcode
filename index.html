@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR-Code Generator – alle Typen & Logos</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      background: #f3f4f6;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 900px;
+      width: 100%;
+      background: #fff;
+      border-radius: 24px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+      padding: 32px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+
+    @media (max-width: 700px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    h1 {
+      grid-column: 1 / -1;
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: #111827;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      grid-column: 1 / -1;
+      color: #6b7280;
+      font-size: 0.95rem;
+      margin-bottom: 8px;
+    }
+
+    /* ----- Formular ----- */
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      font-weight: 500;
+      font-size: 0.9rem;
+      color: #374151;
+      margin-bottom: 6px;
+    }
+
+    input[type="text"],
+    input[type="url"],
+    select {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1.5px solid #d1d5db;
+      border-radius: 12px;
+      font-size: 1rem;
+      transition: border-color 0.2s;
+      background: #fafafa;
+    }
+
+    input:focus,
+    select:focus {
+      outline: none;
+      border-color: #6366f1;
+      background: #fff;
+    }
+
+    .row {
+      display: flex;
+      gap: 12px;
+    }
+
+    .row > * {
+      flex: 1;
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .checkbox-group input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: #6366f1;
+      cursor: pointer;
+    }
+
+    .file-input-wrapper {
+      position: relative;
+      overflow: hidden;
+      display: inline-block;
+      width: 100%;
+    }
+
+    .file-input-wrapper input[type="file"] {
+      position: absolute;
+      left: 0;
+      top: 0;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+
+    .file-input-label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px;
+      border: 2px dashed #d1d5db;
+      border-radius: 12px;
+      background: #fafafa;
+      color: #6b7280;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .file-input-wrapper:hover .file-input-label {
+      border-color: #6366f1;
+      background: #eef2ff;
+    }
+
+    .logo-preview {
+      margin-top: 8px;
+      max-height: 60px;
+      border-radius: 8px;
+      display: none;
+    }
+
+    /* ----- Vorschau ----- */
+    .preview {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #f9fafb;
+      border-radius: 20px;
+      padding: 24px;
+      border: 1px solid #e5e7eb;
+      min-height: 320px;
+    }
+
+    #qrcode {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #qrcode canvas,
+    #qrcode img,
+    #qrcode svg {
+      max-width: 100%;
+      height: auto;
+      border-radius: 12px;
+    }
+
+    .download-btn {
+      margin-top: 16px;
+      padding: 12px 28px;
+      background: #6366f1;
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .download-btn:hover {
+      background: #4f46e5;
+    }
+
+    .download-btn:active {
+      transform: scale(0.97);
+    }
+
+    .download-btn:disabled {
+      background: #a5b4fc;
+      cursor: not-allowed;
+    }
+
+    .hint {
+      font-size: 0.8rem;
+      color: #9ca3af;
+      margin-top: 8px;
+      text-align: center;
+    }
+
+    .error-msg {
+      color: #dc2626;
+      font-size: 0.85rem;
+      margin-top: 4px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>🔳 QR-Code Generator</h1>
+  <p class="subtitle">
+    Unterstützt alle Fehlerkorrekturstufen (L, M, Q, H), die Modi Numeric, Alphanumeric,
+    Byte und Kanji sowie Logos in der Mitte.
+  </p>
+
+  <!-- ========== FORMULAR ========== -->
+  <div>
+    <div class="form-group">
+      <label for="text">Inhalt (Text oder URL)</label>
+      <input type="text" id="text" placeholder="https://example.com" value="https://example.com">
+      <div class="error-msg" id="textError">Bitte gib einen Inhalt ein.</div>
+    </div>
+
+    <div class="row">
+      <div class="form-group">
+        <label for="ecc">Fehlerkorrektur</label>
+        <select id="ecc">
+          <option value="L">L – 7 % (niedrig)</option>
+          <option value="M" selected>M – 15 % (mittel)</option>
+          <option value="Q">Q – 25 % (hoch)</option>
+          <option value="H">H – 30 % (maximal)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="mode">Modus</label>
+        <select id="mode">
+          <option value="Byte" selected>Byte (UTF-8)</option>
+          <option value="Numeric">Numeric</option>
+          <option value="Alphanumeric">Alphanumeric</option>
+          <option value="Kanji">Kanji</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="version">Version (0 = automatisch)</label>
+      <select id="version">
+        <option value="0" selected>Automatisch (0)</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+        <option value="15">15</option>
+        <option value="20">20</option>
+        <option value="25">25</option>
+        <option value="30">30</option>
+        <option value="35">35</option>
+        <option value="40">40</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <div class="checkbox-group">
+        <input type="checkbox" id="useLogo">
+        <label for="useLogo" style="margin-bottom:0; cursor:pointer;">Logo in der Mitte einbetten</label>
+      </div>
+    </div>
+
+    <div class="form-group" id="logoUploadGroup" style="display:none;">
+      <label for="logoFile">Logo auswählen (PNG, JPG, SVG)</label>
+      <div class="file-input-wrapper">
+        <input type="file" id="logoFile" accept="image/png, image/jpeg, image/svg+xml">
+        <div class="file-input-label">
+          📁 Datei auswählen oder hierher ziehen
+        </div>
+      </div>
+      <img id="logoPreview" class="logo-preview" alt="Logo-Vorschau">
+    </div>
+
+    <div class="hint" id="eccHint">
+      Bei einem Logo wird automatisch die Fehlerkorrekturstufe <strong>H</strong> verwendet.
+    </div>
+  </div>
+
+  <!-- ========== VORSCHAU ========== -->
+  <div class="preview">
+    <div id="qrcode"></div>
+    <button class="download-btn" id="downloadBtn" disabled>
+      ⬇️ Als PNG herunterladen
+    </button>
+    <div class="hint">Die Vorschau wird bei jeder Änderung automatisch aktualisiert.</div>
+  </div>
+</div>
+
+<!-- Bibliothek: qr-code-styling -->
+<script src="https://cdn.jsdelivr.net/npm/qr-code-styling@1.9.2/lib/qr-code-styling.min.js"></script>
+
+<script>
+  // ------------------------------------------------------------------
+  //  DOM-Referenzen
+  // ------------------------------------------------------------------
+  const textInput      = document.getElementById('text');
+  const eccSelect      = document.getElementById('ecc');
+  const modeSelect     = document.getElementById('mode');
+  const versionSelect  = document.getElementById('version');
+  const useLogoCheck   = document.getElementById('useLogo');
+  const logoUploadGrp  = document.getElementById('logoUploadGroup');
+  const logoFileInput  = document.getElementById('logoFile');
+  const logoPreview    = document.getElementById('logoPreview');
+  const eccHint        = document.getElementById('eccHint');
+  const textError      = document.getElementById('textError');
+  const qrcodeContainer = document.getElementById('qrcode');
+  const downloadBtn    = document.getElementById('downloadBtn');
+
+  // ------------------------------------------------------------------
+  //  Zustand
+  // ------------------------------------------------------------------
+  let logoDataUrl = null;   // Data-URL des ausgewählten Logos
+  let qrCodeInstance = null;
+  let debounceTimer = null;
+
+  // ------------------------------------------------------------------
+  //  Initialisierung der Bibliothek
+  // ------------------------------------------------------------------
+  function createQrInstance() {
+    // Instanz nur einmal erstellen und danach aktualisieren
+    if (!qrCodeInstance) {
+      qrCodeInstance = new QRCodeStyling({
+        width: 280,
+        height: 280,
+        margin: 10,
+        data: textInput.value || 'https://example.com',
+        image: '',
+        qrOptions: {
+          typeNumber: 0,
+          mode: 'Byte',
+          errorCorrectionLevel: 'M'
+        },
+        imageOptions: {
+          hideBackgroundDots: true,   // Punkte hinter dem Logo ausblenden
+          imageSize: 0.4,             // Logo nimmt 40 % der Breite ein
+          margin: 6,
+          crossOrigin: 'anonymous'
+        },
+        dotsOptions: {
+          color: '#111827',
+          type: 'rounded'             // Punktstil (optional anpassbar)
+        },
+        backgroundOptions: {
+          color: '#ffffff'
+        },
+        cornersSquareOptions: {
+          color: '#111827',
+          type: 'extra-rounded'
+        },
+        cornersDotOptions: {
+          color: '#111827',
+          type: 'dot'
+        }
+      });
+      qrcodeContainer.innerHTML = '';
+      qrCodeInstance.append(qrcodeContainer);
+    }
+  }
+
+  // ------------------------------------------------------------------
+  //  QR-Code aktualisieren
+  // ------------------------------------------------------------------
+  function updateQrCode() {
+    const text = textInput.value.trim();
+    if (!text) {
+      textError.style.display = 'block';
+      downloadBtn.disabled = true;
+      return;
+    }
+    textError.style.display = 'none';
+
+    // Bei Logo: Fehlerkorrektur H erzwingen
+    const useLogo = useLogoCheck.checked && logoDataUrl;
+    const ecc = useLogo ? 'H' : eccSelect.value;
+
+    // Hinweistext anpassen
+    eccHint.innerHTML = useLogo
+      ? 'Logo aktiv – Fehlerkorrektur wurde auf <strong>H</strong> gesetzt.'
+      : 'Bei einem Logo wird automatisch die Fehlerkorrekturstufe <strong>H</strong> verwendet.';
+
+    // ECC-Dropdown visuell deaktivieren, wenn Logo verwendet wird
+    eccSelect.disabled = !!useLogo;
+    if (useLogo) eccSelect.value = 'H';
+
+    // Instanz erstellen, falls noch nicht geschehen
+    createQrInstance();
+
+    // Optionen aktualisieren
+    qrCodeInstance.update({
+      data: text,
+      image: useLogo ? logoDataUrl : '',
+      qrOptions: {
+        typeNumber: parseInt(versionSelect.value, 10),
+        mode: modeSelect.value,
+        errorCorrectionLevel: ecc
+      }
+    });
+
+    downloadBtn.disabled = false;
+  }
+
+  // ------------------------------------------------------------------
+  //  Debounce für Text-/Select-Änderungen
+  // ------------------------------------------------------------------
+  function scheduleUpdate() {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(updateQrCode, 200);
+  }
+
+  // ------------------------------------------------------------------
+  //  Event-Listener
+  // ------------------------------------------------------------------
+  textInput.addEventListener('input', scheduleUpdate);
+  eccSelect.addEventListener('change', scheduleUpdate);
+  modeSelect.addEventListener('change', scheduleUpdate);
+  versionSelect.addEventListener('change', scheduleUpdate);
+
+  // Logo-Checkbox
+  useLogoCheck.addEventListener('change', () => {
+    if (useLogoCheck.checked) {
+      logoUploadGrp.style.display = 'block';
+    } else {
+      logoUploadGrp.style.display = 'none';
+      logoDataUrl = null;
+      logoPreview.style.display = 'none';
+      logoFileInput.value = '';
+      eccSelect.disabled = false;
+    }
+    scheduleUpdate();
+  });
+
+  // Logo-Datei auswählen
+  logoFileInput.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      logoDataUrl = ev.target.result;
+      logoPreview.src = logoDataUrl;
+      logoPreview.style.display = 'block';
+      updateQrCode();
+    };
+    reader.readAsDataURL(file);
+  });
+
+  // Download
+  downloadBtn.addEventListener('click', () => {
+    if (!qrCodeInstance) return;
+    qrCodeInstance.download({
+      name: 'qrcode',
+      extension: 'png'
+    });
+  });
+
+  // ------------------------------------------------------------------
+  //  Initialer Start
+  // ------------------------------------------------------------------
+  window.addEventListener('DOMContentLoaded', () => {
+    updateQrCode();
+  });
+</script>
+
+</body>
+</html>
