@@ -1,497 +1,910 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QR-Code Generator – alle Typen & Logos</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QR-Code Generator – einfach & professionell</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    body {
-      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-      background: #f3f4f6;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      padding: 20px;
-    }
+  body {
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%);
+    min-height: 100vh;
+    color: #111827;
+    padding: 24px 16px 60px;
+  }
 
-    .container {
-      max-width: 900px;
-      width: 100%;
-      background: #fff;
-      border-radius: 24px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
-      padding: 32px;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 32px;
-    }
+  .app { max-width: 1200px; margin: 0 auto; }
 
-    @media (max-width: 700px) {
-      .container {
-        grid-template-columns: 1fr;
-      }
-    }
+  /* ---------- Header ---------- */
+  header { text-align: center; margin-bottom: 28px; }
 
-    h1 {
-      grid-column: 1 / -1;
-      font-size: 1.8rem;
-      font-weight: 600;
-      color: #111827;
-      margin-bottom: 8px;
-    }
+  header h1 {
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 700;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 6px;
+  }
 
-    .subtitle {
-      grid-column: 1 / -1;
-      color: #6b7280;
-      font-size: 0.95rem;
-      margin-bottom: 8px;
-    }
+  header p { color: #6b7280; font-size: 0.95rem; }
 
-    /* ----- Formular ----- */
-    .form-group {
-      margin-bottom: 18px;
-    }
+  /* ---------- Typ-Kacheln ---------- */
+  .type-tiles {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(95px, 1fr));
+    gap: 10px;
+    margin-bottom: 24px;
+  }
 
-    label {
-      display: block;
-      font-weight: 500;
-      font-size: 0.9rem;
-      color: #374151;
-      margin-bottom: 6px;
-    }
+  .type-tile {
+    background: #fff;
+    border: 2px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 14px 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: all 0.18s;
+    font-family: inherit;
+    color: #374151;
+  }
 
-    input[type="text"],
-    input[type="url"],
-    select {
-      width: 100%;
-      padding: 10px 14px;
-      border: 1.5px solid #d1d5db;
-      border-radius: 12px;
-      font-size: 1rem;
-      transition: border-color 0.2s;
-      background: #fafafa;
-    }
+  .type-tile:hover {
+    border-color: #a5b4fc;
+    background: #f5f3ff;
+    transform: translateY(-2px);
+  }
 
-    input:focus,
-    select:focus {
-      outline: none;
-      border-color: #6366f1;
-      background: #fff;
-    }
+  .type-tile.active {
+    border-color: #6366f1;
+    background: #eef2ff;
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12);
+  }
 
-    .row {
-      display: flex;
-      gap: 12px;
-    }
+  .type-icon { font-size: 26px; line-height: 1; }
+  .type-label { font-size: 12px; font-weight: 600; }
 
-    .row > * {
-      flex: 1;
-    }
+  /* ---------- Layout ---------- */
+  .main-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 380px;
+    gap: 24px;
+    align-items: start;
+  }
 
-    .checkbox-group {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-top: 4px;
-    }
+  @media (max-width: 900px) {
+    .main-grid { grid-template-columns: 1fr; }
+    .right-col { position: static !important; }
+  }
 
-    .checkbox-group input[type="checkbox"] {
-      width: 18px;
-      height: 18px;
-      accent-color: #6366f1;
-      cursor: pointer;
-    }
+  .right-col { position: sticky; top: 24px; align-self: start; }
 
-    .file-input-wrapper {
-      position: relative;
-      overflow: hidden;
-      display: inline-block;
-      width: 100%;
-    }
+  /* ---------- Karten ---------- */
+  .card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 4px 20px rgba(17, 24, 39, 0.05);
+    border: 1px solid #f3f4f6;
+    margin-bottom: 20px;
+  }
 
-    .file-input-wrapper input[type="file"] {
-      position: absolute;
-      left: 0;
-      top: 0;
-      opacity: 0;
-      width: 100%;
-      height: 100%;
-      cursor: pointer;
-    }
+  .card h2 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: #111827;
+  }
 
-    .file-input-label {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      padding: 12px;
-      border: 2px dashed #d1d5db;
-      border-radius: 12px;
-      background: #fafafa;
-      color: #6b7280;
-      font-size: 0.9rem;
-      cursor: pointer;
-      transition: border-color 0.2s, background 0.2s;
-    }
+  /* ---------- Formularfelder ---------- */
+  .field { margin-bottom: 14px; }
 
-    .file-input-wrapper:hover .file-input-label {
-      border-color: #6366f1;
-      background: #eef2ff;
-    }
+  .field label {
+    display: block;
+    font-weight: 500;
+    font-size: 0.85rem;
+    color: #4b5563;
+    margin-bottom: 6px;
+  }
 
-    .logo-preview {
-      margin-top: 8px;
-      max-height: 60px;
-      border-radius: 8px;
-      display: none;
-    }
+  .field input,
+  .field textarea,
+  .field select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1.5px solid #d1d5db;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    background: #fafafa;
+    transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+    color: #111827;
+  }
 
-    /* ----- Vorschau ----- */
-    .preview {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background: #f9fafb;
-      border-radius: 20px;
-      padding: 24px;
-      border: 1px solid #e5e7eb;
-      min-height: 320px;
-    }
+  .field textarea { resize: vertical; min-height: 70px; }
 
-    #qrcode {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+  .field input:focus,
+  .field textarea:focus,
+  .field select:focus {
+    outline: none;
+    border-color: #6366f1;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+  }
 
-    #qrcode canvas,
-    #qrcode img,
-    #qrcode svg {
-      max-width: 100%;
-      height: auto;
-      border-radius: 12px;
-    }
+  .data-preview {
+    margin-top: 12px;
+    padding: 10px 12px;
+    background: #f9fafb;
+    border: 1px dashed #d1d5db;
+    border-radius: 10px;
+    font-size: 0.82rem;
+    color: #4b5563;
+    word-break: break-all;
+    font-family: ui-monospace, 'Cascadia Code', monospace;
+  }
 
-    .download-btn {
-      margin-top: 16px;
-      padding: 12px 28px;
-      background: #6366f1;
-      color: #fff;
-      border: none;
-      border-radius: 12px;
-      font-size: 1rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: background 0.2s, transform 0.1s;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+  .data-preview.empty { color: #9ca3af; font-style: italic; }
 
-    .download-btn:hover {
-      background: #4f46e5;
-    }
+  /* ---------- Presets ---------- */
+  .presets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
 
-    .download-btn:active {
-      transform: scale(0.97);
-    }
+  .preset-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    box-shadow: 0 0 0 2px #fff, 0 2px 8px rgba(0, 0, 0, 0.15);
+    padding: 0;
+  }
 
-    .download-btn:disabled {
-      background: #a5b4fc;
-      cursor: not-allowed;
-    }
+  .preset-btn:hover {
+    transform: scale(1.12);
+    box-shadow: 0 0 0 2px #fff, 0 4px 12px rgba(0, 0, 0, 0.22);
+  }
 
-    .hint {
-      font-size: 0.8rem;
-      color: #9ca3af;
-      margin-top: 8px;
-      text-align: center;
-    }
+  /* ---------- Style-Grid ---------- */
+  .style-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 12px;
+  }
 
-    .error-msg {
-      color: #dc2626;
-      font-size: 0.85rem;
-      margin-top: 4px;
-      display: none;
-    }
-  </style>
+  .style-item label {
+    display: block;
+    font-weight: 500;
+    font-size: 0.78rem;
+    color: #6b7280;
+    margin-bottom: 4px;
+  }
+
+  .style-item input[type="color"] {
+    width: 100%;
+    height: 38px;
+    border: 1.5px solid #d1d5db;
+    border-radius: 10px;
+    cursor: pointer;
+    background: #fff;
+    padding: 3px;
+  }
+
+  .style-item select {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1.5px solid #d1d5db;
+    border-radius: 10px;
+    font-size: 0.88rem;
+    background: #fafafa;
+    font-family: inherit;
+    cursor: pointer;
+    color: #111827;
+  }
+
+  .style-item select:focus { outline: none; border-color: #6366f1; }
+
+  /* ---------- Checkbox ---------- */
+  .checkbox-label {
+    display: flex !important;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-weight: 500 !important;
+    font-size: 0.9rem !important;
+    color: #374151 !important;
+  }
+
+  .checkbox-label input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #6366f1;
+    cursor: pointer;
+  }
+
+  /* ---------- Datei-Upload ---------- */
+  .file-input-wrapper { position: relative; overflow: hidden; }
+
+  .file-input-wrapper input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  .file-input-label {
+    padding: 12px;
+    border: 2px dashed #d1d5db;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 0.88rem;
+    color: #6b7280;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .file-input-wrapper:hover .file-input-label {
+    border-color: #6366f1;
+    background: #eef2ff;
+    color: #4f46e5;
+  }
+
+  .logo-preview {
+    max-height: 60px;
+    max-width: 100%;
+    margin-top: 8px;
+    border-radius: 8px;
+    display: none;
+    border: 1px solid #e5e7eb;
+  }
+
+  /* ---------- Vorschau ---------- */
+  .preview-card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 4px 20px rgba(17, 24, 39, 0.05);
+    border: 1px solid #f3f4f6;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+  }
+
+  #qrcode {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 280px;
+    width: 100%;
+  }
+
+  #qrcode canvas,
+  #qrcode img,
+  #qrcode svg {
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+    display: block;
+  }
+
+  .download-btn {
+    width: 100%;
+    padding: 14px;
+    background: #6366f1;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    font-family: inherit;
+  }
+
+  .download-btn:hover:not(:disabled) { background: #4f46e5; }
+  .download-btn:active:not(:disabled) { transform: scale(0.98); }
+  .download-btn:disabled { background: #c7d2fe; cursor: not-allowed; }
+
+  .hint {
+    font-size: 0.78rem;
+    color: #9ca3af;
+    text-align: center;
+    line-height: 1.4;
+  }
+</style>
 </head>
 <body>
 
-<div class="container">
-  <h1>🔳 QR-Code Generator</h1>
-  <p class="subtitle">
-    Unterstützt alle Fehlerkorrekturstufen (L, M, Q, H), die Modi Numeric, Alphanumeric,
-    Byte und Kanji sowie Logos in der Mitte.
-  </p>
+<div class="app">
+  <header>
+    <h1>🔳 QR-Code Generator</h1>
+    <p>Wähle einen Typ, gib deine Daten ein und gestalte deinen QR-Code.</p>
+  </header>
 
-  <!-- ========== FORMULAR ========== -->
-  <div>
-    <div class="form-group">
-      <label for="text">Inhalt (Text oder URL)</label>
-      <input type="text" id="text" placeholder="https://example.com" value="https://example.com">
-      <div class="error-msg" id="textError">Bitte gib einen Inhalt ein.</div>
-    </div>
+  <!-- Typ-Auswahl -->
+  <div class="type-tiles" id="typeTiles"></div>
 
-    <div class="row">
-      <div class="form-group">
-        <label for="ecc">Fehlerkorrektur</label>
-        <select id="ecc">
-          <option value="L">L – 7 % (niedrig)</option>
-          <option value="M" selected>M – 15 % (mittel)</option>
-          <option value="Q">Q – 25 % (hoch)</option>
-          <option value="H">H – 30 % (maximal)</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label for="mode">Modus</label>
-        <select id="mode">
-          <option value="Byte" selected>Byte (UTF-8)</option>
-          <option value="Numeric">Numeric</option>
-          <option value="Alphanumeric">Alphanumeric</option>
-          <option value="Kanji">Kanji</option>
-        </select>
-      </div>
-    </div>
+  <div class="main-grid">
+    <div class="left-col">
+      <!-- Inhalt -->
+      <section class="card">
+        <h2 id="formTitle">Website</h2>
+        <div id="formFields"></div>
+        <div class="data-preview empty" id="dataPreview">Noch keine Daten</div>
+      </section>
 
-    <div class="form-group">
-      <label for="version">Version (0 = automatisch)</label>
-      <select id="version">
-        <option value="0" selected>Automatisch (0)</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-        <option value="7">7</option>
-        <option value="8">8</option>
-        <option value="9">9</option>
-        <option value="10">10</option>
-        <option value="15">15</option>
-        <option value="20">20</option>
-        <option value="25">25</option>
-        <option value="30">30</option>
-        <option value="35">35</option>
-        <option value="40">40</option>
-      </select>
-    </div>
+      <!-- Design -->
+      <section class="card">
+        <h2>🎨 Design</h2>
+        <div class="presets" id="presets"></div>
 
-    <div class="form-group">
-      <div class="checkbox-group">
-        <input type="checkbox" id="useLogo">
-        <label for="useLogo" style="margin-bottom:0; cursor:pointer;">Logo in der Mitte einbetten</label>
-      </div>
-    </div>
-
-    <div class="form-group" id="logoUploadGroup" style="display:none;">
-      <label for="logoFile">Logo auswählen (PNG, JPG, SVG)</label>
-      <div class="file-input-wrapper">
-        <input type="file" id="logoFile" accept="image/png, image/jpeg, image/svg+xml">
-        <div class="file-input-label">
-          📁 Datei auswählen oder hierher ziehen
+        <div class="style-grid">
+          <div class="style-item">
+            <label for="dotsColor">Punktfarbe</label>
+            <input type="color" id="dotsColor" value="#111827">
+          </div>
+          <div class="style-item">
+            <label for="cornerSquareColor">Ecken-Rahmen</label>
+            <input type="color" id="cornerSquareColor" value="#111827">
+          </div>
+          <div class="style-item">
+            <label for="cornerDotColor">Ecken-Punkt</label>
+            <input type="color" id="cornerDotColor" value="#111827">
+          </div>
+          <div class="style-item">
+            <label for="bgColor">Hintergrund</label>
+            <input type="color" id="bgColor" value="#ffffff">
+          </div>
         </div>
+
+        <div class="style-grid">
+          <div class="style-item">
+            <label for="dotsType">Punktform</label>
+            <select id="dotsType">
+              <option value="square">Quadrat</option>
+              <option value="dots">Punkte</option>
+              <option value="rounded" selected>Abgerundet</option>
+              <option value="classy">Classy</option>
+              <option value="classy-rounded">Classy Rounded</option>
+              <option value="extra-rounded">Extra Rounded</option>
+            </select>
+          </div>
+          <div class="style-item">
+            <label for="cornerSquareType">Ecken-Form</label>
+            <select id="cornerSquareType">
+              <option value="square">Quadrat</option>
+              <option value="dot">Punkt</option>
+              <option value="extra-rounded" selected>Extra Rounded</option>
+            </select>
+          </div>
+          <div class="style-item">
+            <label for="cornerDotType">Ecken-Punkt-Form</label>
+            <select id="cornerDotType">
+              <option value="square">Quadrat</option>
+              <option value="dot" selected>Punkt</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="style-item" style="margin-top:14px;">
+          <label class="checkbox-label">
+            <input type="checkbox" id="useLogo">
+            Logo in der Mitte einbetten
+          </label>
+        </div>
+        <div id="logoUploadGroup" style="display:none; margin-top:10px;">
+          <div class="file-input-wrapper">
+            <input type="file" id="logoFile" accept="image/*">
+            <div class="file-input-label">📁 Logo auswählen</div>
+          </div>
+          <img id="logoPreview" class="logo-preview" alt="Logo-Vorschau">
+        </div>
+      </section>
+
+      <!-- Erweitert -->
+      <section class="card">
+        <h2>⚙️ Erweitert</h2>
+        <div class="style-grid">
+          <div class="style-item">
+            <label for="ecc">Fehlerkorrektur</label>
+            <select id="ecc">
+              <option value="L">L – 7 %</option>
+              <option value="M" selected>M – 15 %</option>
+              <option value="Q">Q – 25 %</option>
+              <option value="H">H – 30 %</option>
+            </select>
+          </div>
+          <div class="style-item">
+            <label for="version">Version (0 = auto)</label>
+            <select id="version">
+              <option value="0" selected>Automatisch</option>
+            </select>
+          </div>
+          <div class="style-item">
+            <label for="mode">Modus</label>
+            <select id="mode">
+              <option value="Byte" selected>Byte (Standard)</option>
+              <option value="Numeric">Numeric</option>
+              <option value="Alphanumeric">Alphanumeric</option>
+              <option value="Kanji">Kanji</option>
+            </select>
+          </div>
+        </div>
+        <p class="hint" style="text-align:left; margin-top:8px;">
+          💡 <strong>Byte</strong> funktioniert für alle Daten. Bei aktivem Logo wird automatisch <strong>H</strong> genutzt.
+        </p>
+      </section>
+    </div>
+
+    <!-- Vorschau -->
+    <div class="right-col">
+      <div class="preview-card">
+        <div id="qrcode"></div>
+        <button class="download-btn" id="downloadBtn" disabled>⬇️ Als PNG herunterladen</button>
+        <p class="hint">Die Vorschau wird automatisch aktualisiert.</p>
       </div>
-      <img id="logoPreview" class="logo-preview" alt="Logo-Vorschau">
     </div>
-
-    <div class="hint" id="eccHint">
-      Bei einem Logo wird automatisch die Fehlerkorrekturstufe <strong>H</strong> verwendet.
-    </div>
-  </div>
-
-  <!-- ========== VORSCHAU ========== -->
-  <div class="preview">
-    <div id="qrcode"></div>
-    <button class="download-btn" id="downloadBtn" disabled>
-      ⬇️ Als PNG herunterladen
-    </button>
-    <div class="hint">Die Vorschau wird bei jeder Änderung automatisch aktualisiert.</div>
   </div>
 </div>
 
-<!-- Bibliothek: qr-code-styling -->
+<!-- Bibliothek -->
 <script src="https://cdn.jsdelivr.net/npm/qr-code-styling@1.9.2/lib/qr-code-styling.min.js"></script>
 
 <script>
-  // ------------------------------------------------------------------
-  //  DOM-Referenzen
-  // ------------------------------------------------------------------
-  const textInput      = document.getElementById('text');
-  const eccSelect      = document.getElementById('ecc');
-  const modeSelect     = document.getElementById('mode');
-  const versionSelect  = document.getElementById('version');
-  const useLogoCheck   = document.getElementById('useLogo');
-  const logoUploadGrp  = document.getElementById('logoUploadGroup');
-  const logoFileInput  = document.getElementById('logoFile');
-  const logoPreview    = document.getElementById('logoPreview');
-  const eccHint        = document.getElementById('eccHint');
-  const textError      = document.getElementById('textError');
-  const qrcodeContainer = document.getElementById('qrcode');
-  const downloadBtn    = document.getElementById('downloadBtn');
-
-  // ------------------------------------------------------------------
-  //  Zustand
-  // ------------------------------------------------------------------
-  let logoDataUrl = null;   // Data-URL des ausgewählten Logos
-  let qrCodeInstance = null;
-  let debounceTimer = null;
-
-  // ------------------------------------------------------------------
-  //  Initialisierung der Bibliothek
-  // ------------------------------------------------------------------
-  function createQrInstance() {
-    // Instanz nur einmal erstellen und danach aktualisieren
-    if (!qrCodeInstance) {
-      qrCodeInstance = new QRCodeStyling({
-        width: 280,
-        height: 280,
-        margin: 10,
-        data: textInput.value || 'https://example.com',
-        image: '',
-        qrOptions: {
-          typeNumber: 0,
-          mode: 'Byte',
-          errorCorrectionLevel: 'M'
-        },
-        imageOptions: {
-          hideBackgroundDots: true,   // Punkte hinter dem Logo ausblenden
-          imageSize: 0.4,             // Logo nimmt 40 % der Breite ein
-          margin: 6,
-          crossOrigin: 'anonymous'
-        },
-        dotsOptions: {
-          color: '#111827',
-          type: 'rounded'             // Punktstil (optional anpassbar)
-        },
-        backgroundOptions: {
-          color: '#ffffff'
-        },
-        cornersSquareOptions: {
-          color: '#111827',
-          type: 'extra-rounded'
-        },
-        cornersDotOptions: {
-          color: '#111827',
-          type: 'dot'
-        }
-      });
-      qrcodeContainer.innerHTML = '';
-      qrCodeInstance.append(qrcodeContainer);
+/* =========================================================
+   CONTENT-TYPEN
+   ========================================================= */
+const contentTypes = {
+  url: {
+    label: 'Website', icon: '🌐',
+    fields: [
+      { name: 'url', label: 'URL', type: 'text', placeholder: 'z. B. wikipedia.org', value: 'https://www.wikipedia.org' }
+    ],
+    build(v) {
+      let u = (v.url || '').trim();
+      if (u && !/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(u)) u = 'https://' + u;
+      return u;
+    }
+  },
+  text: {
+    label: 'Text', icon: '📝',
+    fields: [
+      { name: 'text', label: 'Dein Text', type: 'textarea', placeholder: 'Beliebiger Text …', value: '' }
+    ],
+    build(v) { return (v.text || '').trim(); }
+  },
+  phone: {
+    label: 'Telefon', icon: '📞',
+    fields: [
+      { name: 'phone', label: 'Telefonnummer', type: 'tel', placeholder: '+49 123 456789', value: '' }
+    ],
+    build(v) {
+      const p = (v.phone || '').replace(/[^\d+]/g, '');
+      return p ? 'tel:' + p : '';
+    }
+  },
+  email: {
+    label: 'E-Mail', icon: '✉️',
+    fields: [
+      { name: 'to', label: 'Empfänger', type: 'email', placeholder: 'info@example.com', value: '' },
+      { name: 'subject', label: 'Betreff (optional)', type: 'text', placeholder: '', value: '' },
+      { name: 'body', label: 'Nachricht (optional)', type: 'textarea', placeholder: '', value: '' }
+    ],
+    build(v) {
+      const to = (v.to || '').trim();
+      if (!to) return '';
+      let s = 'mailto:' + to;
+      const p = [];
+      if (v.subject) p.push('subject=' + encodeURIComponent(v.subject));
+      if (v.body) p.push('body=' + encodeURIComponent(v.body));
+      if (p.length) s += '?' + p.join('&');
+      return s;
+    }
+  },
+  sms: {
+    label: 'SMS', icon: '💬',
+    fields: [
+      { name: 'phone', label: 'Telefonnummer', type: 'tel', placeholder: '+49 123 456789', value: '' },
+      { name: 'message', label: 'Nachricht', type: 'textarea', placeholder: 'Hallo!', value: '' }
+    ],
+    build(v) {
+      const p = (v.phone || '').replace(/\s+/g, '');
+      if (!p) return '';
+      return v.message ? `SMSTO:${p}:${v.message}` : `SMSTO:${p}`;
+    }
+  },
+  wifi: {
+    label: 'WLAN', icon: '📶',
+    fields: [
+      { name: 'ssid', label: 'Netzwerkname (SSID)', type: 'text', placeholder: 'MeinWLAN', value: '' },
+      { name: 'password', label: 'Passwort', type: 'text', placeholder: '', value: '' },
+      { name: 'encryption', label: 'Verschlüsselung', type: 'select',
+        options: [['WPA', 'WPA/WPA2/WPA3'], ['WEP', 'WEP'], ['nopass', 'Offen (kein Passwort)']], value: 'WPA' },
+      { name: 'hidden', label: 'Verstecktes Netzwerk', type: 'checkbox', value: false }
+    ],
+    build(v) {
+      if (!v.ssid) return '';
+      const esc = (s) => String(s || '').replace(/([\\;,":])/g, '\\$1');
+      let s = `WIFI:T:${v.encryption};S:${esc(v.ssid)};`;
+      if (v.encryption !== 'nopass') s += `P:${esc(v.password)};`;
+      if (v.hidden) s += 'H:true;';
+      return s + ';';
+    }
+  },
+  vcard: {
+    label: 'Kontakt', icon: '👤',
+    fields: [
+      { name: 'firstname', label: 'Vorname', type: 'text', placeholder: 'Max', value: '' },
+      { name: 'lastname', label: 'Nachname', type: 'text', placeholder: 'Mustermann', value: '' },
+      { name: 'org', label: 'Firma (optional)', type: 'text', placeholder: '', value: '' },
+      { name: 'phone', label: 'Telefon', type: 'tel', placeholder: '', value: '' },
+      { name: 'email', label: 'E-Mail', type: 'email', placeholder: '', value: '' },
+      { name: 'url', label: 'Website', type: 'url', placeholder: '', value: '' },
+      { name: 'street', label: 'Straße', type: 'text', placeholder: '', value: '' },
+      { name: 'zip', label: 'PLZ', type: 'text', placeholder: '', value: '' },
+      { name: 'city', label: 'Stadt', type: 'text', placeholder: '', value: '' }
+    ],
+    build(v) {
+      const fn = (v.firstname || '').trim();
+      const ln = (v.lastname || '').trim();
+      if (!fn && !ln) return '';
+      const lines = ['BEGIN:VCARD', 'VERSION:3.0'];
+      lines.push(`N:${ln};${fn};;;`);
+      lines.push(`FN:${[fn, ln].filter(Boolean).join(' ')}`);
+      if (v.org) lines.push(`ORG:${v.org}`);
+      if (v.phone) lines.push(`TEL;TYPE=CELL:${v.phone}`);
+      if (v.email) lines.push(`EMAIL:${v.email}`);
+      if (v.url) lines.push(`URL:${v.url}`);
+      if (v.street || v.zip || v.city)
+        lines.push(`ADR:;;${v.street || ''};${v.city || ''};;${v.zip || ''};`);
+      lines.push('END:VCARD');
+      return lines.join('\r\n');
+    }
+  },
+  geo: {
+    label: 'Standort', icon: '📍',
+    fields: [
+      { name: 'lat', label: 'Breitengrad', type: 'text', placeholder: '52.5200', value: '' },
+      { name: 'lng', label: 'Längengrad', type: 'text', placeholder: '13.4050', value: '' }
+    ],
+    build(v) {
+      const lat = (v.lat || '').trim();
+      const lng = (v.lng || '').trim();
+      return (lat && lng) ? `geo:${lat},${lng}` : '';
+    }
+  },
+  event: {
+    label: 'Termin', icon: '📅',
+    fields: [
+      { name: 'title', label: 'Titel', type: 'text', placeholder: 'Meeting', value: '' },
+      { name: 'location', label: 'Ort', type: 'text', placeholder: '', value: '' },
+      { name: 'start', label: 'Beginn', type: 'datetime-local', value: '' },
+      { name: 'end', label: 'Ende', type: 'datetime-local', value: '' }
+    ],
+    build(v) {
+      if (!v.title) return '';
+      const f = (s) => s ? s.replace(/[-:]/g, '') + '00' : '';
+      const lines = ['BEGIN:VEVENT'];
+      if (v.title) lines.push(`SUMMARY:${v.title}`);
+      if (v.location) lines.push(`LOCATION:${v.location}`);
+      if (v.start) lines.push(`DTSTART:${f(v.start)}`);
+      if (v.end) lines.push(`DTEND:${f(v.end)}`);
+      lines.push('END:VEVENT');
+      return lines.join('\r\n');
     }
   }
+};
 
-  // ------------------------------------------------------------------
-  //  QR-Code aktualisieren
-  // ------------------------------------------------------------------
-  function updateQrCode() {
-    const text = textInput.value.trim();
-    if (!text) {
-      textError.style.display = 'block';
-      downloadBtn.disabled = true;
+/* =========================================================
+   PRESETS
+   ========================================================= */
+const presets = [
+  { id: 'classic', dots: '#111827', cornerSquare: '#111827', cornerDot: '#111827', bg: '#ffffff',
+    dotsType: 'square', cornerSquareType: 'square', cornerDotType: 'square' },
+  { id: 'modern',  dots: '#4f46e5', cornerSquare: '#4f46e5', cornerDot: '#4f46e5', bg: '#ffffff',
+    dotsType: 'rounded', cornerSquareType: 'extra-rounded', cornerDotType: 'dot' },
+  { id: 'sunset',  dots: '#f97316', cornerSquare: '#dc2626', cornerDot: '#dc2626', bg: '#fff7ed',
+    dotsType: 'dots', cornerSquareType: 'extra-rounded', cornerDotType: 'dot' },
+  { id: 'ocean',   dots: '#0891b2', cornerSquare: '#0e7490', cornerDot: '#0e7490', bg: '#ecfeff',
+    dotsType: 'classy-rounded', cornerSquareType: 'extra-rounded', cornerDotType: 'dot' },
+  { id: 'forest',  dots: '#16a34a', cornerSquare: '#15803d', cornerDot: '#15803d', bg: '#f0fdf4',
+    dotsType: 'rounded', cornerSquareType: 'extra-rounded', cornerDotType: 'dot' },
+  { id: 'pink',    dots: '#db2777', cornerSquare: '#be185d', cornerDot: '#be185d', bg: '#fdf2f8',
+    dotsType: 'classy', cornerSquareType: 'extra-rounded', cornerDotType: 'dot' },
+  { id: 'dark',    dots: '#ffffff', cornerSquare: '#ffffff', cornerDot: '#ffffff', bg: '#111827',
+    dotsType: 'rounded', cornerSquareType: 'extra-rounded', cornerDotType: 'dot' }
+];
+
+/* =========================================================
+   ZUSTAND
+   ========================================================= */
+let currentType = 'url';
+let logoDataUrl = null;
+let qrCodeInstance = null;
+let debounceTimer = null;
+
+/* =========================================================
+   DOM-REFERENZEN
+   ========================================================= */
+const $ = (id) => document.getElementById(id);
+const typeTiles    = $('typeTiles');
+const formFields   = $('formFields');
+const formTitle    = $('formTitle');
+const dataPreview  = $('dataPreview');
+const presetsEl    = $('presets');
+const downloadBtn  = $('downloadBtn');
+const qrcodeEl     = $('qrcode');
+const useLogoCheck = $('useLogo');
+const logoUploadGrp = $('logoUploadGroup');
+const logoFileInput = $('logoFile');
+const logoPreview  = $('logoPreview');
+
+/* =========================================================
+   RENDER: TYP-KACHELN
+   ========================================================= */
+function renderTypeTiles() {
+  typeTiles.innerHTML = Object.entries(contentTypes).map(([key, t]) => `
+    <button class="type-tile ${key === currentType ? 'active' : ''}" data-type="${key}" type="button">
+      <span class="type-icon">${t.icon}</span>
+      <span class="type-label">${t.label}</span>
+    </button>`).join('');
+}
+
+/* =========================================================
+   RENDER: FORMULAR
+   ========================================================= */
+function renderForm() {
+  const t = contentTypes[currentType];
+  formTitle.textContent = t.label;
+
+  let html = '';
+  t.fields.forEach(f => {
+    const id = 'f_' + f.name;
+    const safeVal = (f.value ?? '').toString().replace(/"/g, '&quot;');
+    let control = '';
+
+    if (f.type === 'textarea') {
+      control = `<textarea id="${id}" data-field="${f.name}" placeholder="${f.placeholder || ''}">${f.value || ''}</textarea>`;
+    } else if (f.type === 'select') {
+      control = `<select id="${id}" data-field="${f.name}">${f.options.map(([v, l]) =>
+        `<option value="${v}" ${v === f.value ? 'selected' : ''}>${l}</option>`).join('')}</select>`;
+    } else if (f.type === 'checkbox') {
+      html += `<div class="field"><label class="checkbox-label">
+        <input type="checkbox" id="${id}" data-field="${f.name}" ${f.value ? 'checked' : ''}>
+        ${f.label}</label></div>`;
       return;
+    } else {
+      control = `<input type="${f.type || 'text'}" id="${id}" data-field="${f.name}"
+        placeholder="${f.placeholder || ''}" value="${safeVal}">`;
     }
-    textError.style.display = 'none';
 
-    // Bei Logo: Fehlerkorrektur H erzwingen
-    const useLogo = useLogoCheck.checked && logoDataUrl;
-    const ecc = useLogo ? 'H' : eccSelect.value;
+    html += `<div class="field">
+      <label for="${id}">${f.label}</label>
+      ${control}
+    </div>`;
+  });
 
-    // Hinweistext anpassen
-    eccHint.innerHTML = useLogo
-      ? 'Logo aktiv – Fehlerkorrektur wurde auf <strong>H</strong> gesetzt.'
-      : 'Bei einem Logo wird automatisch die Fehlerkorrekturstufe <strong>H</strong> verwendet.';
+  formFields.innerHTML = html;
+}
 
-    // ECC-Dropdown visuell deaktivieren, wenn Logo verwendet wird
-    eccSelect.disabled = !!useLogo;
-    if (useLogo) eccSelect.value = 'H';
+/* =========================================================
+   WERTE LESEN & DATEN BAUEN
+   ========================================================= */
+function getFormValues() {
+  const t = contentTypes[currentType];
+  const v = {};
+  t.fields.forEach(f => {
+    const el = formFields.querySelector(`[data-field="${f.name}"]`);
+    if (!el) return;
+    v[f.name] = f.type === 'checkbox' ? el.checked : el.value;
+  });
+  return v;
+}
 
-    // Instanz erstellen, falls noch nicht geschehen
-    createQrInstance();
+function buildData() {
+  try {
+    return contentTypes[currentType].build(getFormValues()) || '';
+  } catch (e) {
+    console.error(e);
+    return '';
+  }
+}
 
-    // Optionen aktualisieren
+/* =========================================================
+   STYLE AUS FORMULAR LESEN
+   ========================================================= */
+function getStyle() {
+  return {
+    dotsColor: $('dotsColor').value,
+    cornerSquareColor: $('cornerSquareColor').value,
+    cornerDotColor: $('cornerDotColor').value,
+    bgColor: $('bgColor').value,
+    dotsType: $('dotsType').value,
+    cornerSquareType: $('cornerSquareType').value,
+    cornerDotType: $('cornerDotType').value
+  };
+}
+
+/* =========================================================
+   QR-CODE AKTUALISIEREN
+   ========================================================= */
+function updateQr() {
+  const data = buildData();
+  const style = getStyle();
+  const useLogo = useLogoCheck.checked && !!logoDataUrl;
+  const ecc = useLogo ? 'H' : $('ecc').value;
+
+  // Datenvorschau
+  if (data) {
+    const shown = data.length > 120 ? data.slice(0, 120) + '…' : data;
+    dataPreview.textContent = shown.replace(/\r?\n/g, ' ↵ ');
+    dataPreview.classList.remove('empty');
+  } else {
+    dataPreview.textContent = '⚠️ Bitte fülle die Felder aus.';
+    dataPreview.classList.add('empty');
+  }
+
+  // Instanz erstellen
+  if (!qrCodeInstance) {
+    qrCodeInstance = new QRCodeStyling({ width: 280, height: 280, margin: 12, type: 'canvas' });
+    qrcodeEl.innerHTML = '';
+    qrCodeInstance.append(qrcodeEl);
+  }
+
+  try {
     qrCodeInstance.update({
-      data: text,
+      data: data || ' ',
       image: useLogo ? logoDataUrl : '',
       qrOptions: {
-        typeNumber: parseInt(versionSelect.value, 10),
-        mode: modeSelect.value,
+        typeNumber: parseInt($('version').value, 10) || 0,
+        mode: $('mode').value,
         errorCorrectionLevel: ecc
+      },
+      dotsOptions: {
+        color: style.dotsColor,
+        type: style.dotsType
+      },
+      cornersSquareOptions: {
+        color: style.cornerSquareColor,
+        type: style.cornerSquareType
+      },
+      cornersDotOptions: {
+        color: style.cornerDotColor,
+        type: style.cornerDotType
+      },
+      backgroundOptions: { color: style.bgColor },
+      imageOptions: {
+        hideBackgroundDots: true,
+        imageSize: 0.4,
+        margin: 6,
+        crossOrigin: 'anonymous'
       }
     });
-
-    downloadBtn.disabled = false;
+  } catch (e) {
+    console.error('QR-Fehler:', e);
   }
 
-  // ------------------------------------------------------------------
-  //  Debounce für Text-/Select-Änderungen
-  // ------------------------------------------------------------------
-  function scheduleUpdate() {
-    clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(updateQrCode, 200);
+  downloadBtn.disabled = !data;
+}
+
+function scheduleUpdate() {
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(updateQr, 150);
+}
+
+/* =========================================================
+   PRESETS RENDERN + ANWENDEN
+   ========================================================= */
+function renderPresets() {
+  presetsEl.innerHTML = presets.map(p =>
+    `<button class="preset-btn" data-preset="${p.id}" title="${p.id}"
+      style="background:${p.dots}; border:3px solid ${p.cornerSquare};"></button>`
+  ).join('');
+}
+
+function applyPreset(id) {
+  const p = presets.find(x => x.id === id);
+  if (!p) return;
+  $('dotsColor').value = p.dots;
+  $('cornerSquareColor').value = p.cornerSquare;
+  $('cornerDotColor').value = p.cornerDot;
+  $('bgColor').value = p.bg;
+  $('dotsType').value = p.dotsType;
+  $('cornerSquareType').value = p.cornerSquareType;
+  $('cornerDotType').value = p.cornerDotType;
+  updateQr();
+}
+
+/* =========================================================
+   EVENTS
+   ========================================================= */
+typeTiles.addEventListener('click', (e) => {
+  const tile = e.target.closest('.type-tile');
+  if (!tile) return;
+  currentType = tile.dataset.type;
+  document.querySelectorAll('.type-tile').forEach(t =>
+    t.classList.toggle('active', t.dataset.type === currentType));
+  renderForm();
+  updateQr();
+});
+
+presetsEl.addEventListener('click', (e) => {
+  const btn = e.target.closest('.preset-btn');
+  if (btn) applyPreset(btn.dataset.preset);
+});
+
+// Formular-Eingaben
+['input', 'change'].forEach(evt => {
+  formFields.addEventListener(evt, scheduleUpdate);
+});
+
+// Style-Änderungen
+['dotsColor','cornerSquareColor','cornerDotColor','bgColor',
+ 'dotsType','cornerSquareType','cornerDotType',
+ 'ecc','version','mode'].forEach(id => {
+  const el = $(id);
+  el.addEventListener('input', scheduleUpdate);
+  el.addEventListener('change', scheduleUpdate);
+});
+
+// Logo
+useLogoCheck.addEventListener('change', () => {
+  logoUploadGrp.style.display = useLogoCheck.checked ? 'block' : 'none';
+  scheduleUpdate();
+});
+
+logoFileInput.addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    logoDataUrl = ev.target.result;
+    logoPreview.src = logoDataUrl;
+    logoPreview.style.display = 'block';
+    updateQr();
+  };
+  reader.readAsDataURL(file);
+});
+
+// Download
+downloadBtn.addEventListener('click', () => {
+  if (qrCodeInstance) {
+    qrCodeInstance.download({ name: 'qrcode', extension: 'png' });
   }
+});
 
-  // ------------------------------------------------------------------
-  //  Event-Listener
-  // ------------------------------------------------------------------
-  textInput.addEventListener('input', scheduleUpdate);
-  eccSelect.addEventListener('change', scheduleUpdate);
-  modeSelect.addEventListener('change', scheduleUpdate);
-  versionSelect.addEventListener('change', scheduleUpdate);
+/* =========================================================
+   VERSION-SELECT BEFÜLLEN (1–40)
+   ========================================================= */
+(function fillVersions() {
+  const sel = $('version');
+  for (let i = 1; i <= 40; i++) {
+    const opt = document.createElement('option');
+    opt.value = i;
+    opt.textContent = i;
+    sel.appendChild(opt);
+  }
+})();
 
-  // Logo-Checkbox
-  useLogoCheck.addEventListener('change', () => {
-    if (useLogoCheck.checked) {
-      logoUploadGrp.style.display = 'block';
-    } else {
-      logoUploadGrp.style.display = 'none';
-      logoDataUrl = null;
-      logoPreview.style.display = 'none';
-      logoFileInput.value = '';
-      eccSelect.disabled = false;
-    }
-    scheduleUpdate();
-  });
-
-  // Logo-Datei auswählen
-  logoFileInput.addEventListener('change', (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      logoDataUrl = ev.target.result;
-      logoPreview.src = logoDataUrl;
-      logoPreview.style.display = 'block';
-      updateQrCode();
-    };
-    reader.readAsDataURL(file);
-  });
-
-  // Download
-  downloadBtn.addEventListener('click', () => {
-    if (!qrCodeInstance) return;
-    qrCodeInstance.download({
-      name: 'qrcode',
-      extension: 'png'
-    });
-  });
-
-  // ------------------------------------------------------------------
-  //  Initialer Start
-  // ------------------------------------------------------------------
-  window.addEventListener('DOMContentLoaded', () => {
-    updateQrCode();
-  });
+/* =========================================================
+   INIT
+   ========================================================= */
+renderTypeTiles();
+renderForm();
+renderPresets();
+updateQr();
 </script>
-
 </body>
 </html>
